@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.conf.urls import include
 from django.contrib import admin
 from two_factor.admin import AdminSiteOTPRequired
 
@@ -22,4 +23,14 @@ admin.site.__class__ = AdminSiteOTPRequired
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('two_factor.urls', 'two_factor')),
+    url(
+        regex=r'^account/login/$',
+        view=LoginView.as_view(),
+        name='login',
+    ),
+    url(
+        regex=r'^account/two_factor/setup/$',
+        view=SetupView.as_view(),
+        name='setup',
+    ),
 ]
