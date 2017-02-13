@@ -12,7 +12,10 @@ class HomePageView(TemplateView):
 
     def get_context_data(self):
         """View for the home page."""
-        the_user = UserProfile.objects.all().filter(
-            username=self.request.user.username)
-        context = {'user': the_user}
+        # the_user = UserProfile.objects.all().filter(
+        #     user=self.request.user)
+        # if the_user:
+        #     context = {'user': the_user}
+        # else:
+        context = {}
         return context

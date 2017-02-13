@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'IOThomeinspector',
     'multiselectfield',
-    'userprofile'
+    'userprofile',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,22 @@ STATIC_URL = '/static/'
 
 # for HMAC registration
 ACCOUNT_ACTIVATION_DAYS = 7
+
+#EMAIL STUFF
+
+if DEBUG is True:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'conor.clary@gmail.com'
+
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
+
+#LOGIN/LOGOUT URLS
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'

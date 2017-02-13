@@ -1,6 +1,6 @@
 {% extends "base.html" %}
     <h2>Please complete and submit this form.</h2>
-    {% block content %}
+    {% block body %}
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
