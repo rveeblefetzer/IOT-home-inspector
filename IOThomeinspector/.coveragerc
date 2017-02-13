@@ -1,0 +1,13 @@
+[run]
+source = 
+    userprofile
+    IOThomeinspector
+
+omit = 
+    */migrations/*
+    */tests.py
+    manage.py
+    IOThomeinspector/wsgi.py
+
+[report]
+show_missing = True

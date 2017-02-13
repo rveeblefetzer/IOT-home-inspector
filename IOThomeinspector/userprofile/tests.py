@@ -57,5 +57,36 @@ class ProfileTestCase(TestCase):
         profile.devices = ["nest", "amazon-echo"]
         profile.save()
         test_user = User.objects.filter(username=profile.user.username).first()
-        # import pdb; pdb.set_trace()
         self.assertTrue(len(test_user.profile.devices) == 2)
+
+    def test_user_is_active(self):
+        """User should be active."""
+        user = self.users[0]
+        self.assertTrue(user.is_active)
+
+    def test_user_is_active2(self):
+        """User should be active."""
+        user = self.users[0]
+        self.assertTrue(user.profile.is_active)
+
+    def test_inactive_users(self):
+        """Test that inactive users are not active."""
+        the_user = self.users[0]
+        the_user.is_active = False
+        the_user.save()
+        self.assertTrue(UserProfile.active.count() == User.objects.count() - 1)
+
+    def test_delete_user_deletes_profile(self):
+        """Deleting a user should delete a profile associated with it."""
+        user = self.users[0]
+        self.assertTrue(UserProfile.objects.count() == 20)
+        count = UserProfile.objects.count()
+        user.delete()
+        self.assertTrue(UserProfile.objects.count() == count - 1)
+
+    def test_delete_user_deletes_user(self):
+        """Deleting a user should delete the user."""
+        user = self.users[0]
+        count = User.objects.count()
+        user.delete()
+        self.assertTrue(User.objects.count() == count - 1)

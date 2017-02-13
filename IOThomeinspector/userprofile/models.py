@@ -9,16 +9,17 @@ import uuid
 
 DEVICE_CHOICES = (
     ("philips-hue", "Philips Hue"),
-    ("amazon-echoe","Amazon Echoe"),
+    ("amazon-echo", "Amazon Echo"),
     ("nest", "Nest"),
     ("fitbit", "FitBit")
 )
+
 class ActiveUserManager(models.Manager):
     """Query UserProfile of active user."""
 
-    def get_querysets(self):
+    def get_queryset(self):
         """Return query set of profiles for active users."""
-        query = super(ActiveUserManager, self).get_querysets()
+        query = super(ActiveUserManager, self).get_queryset()
         return query.filter(user__is_active__exact=True)
 
 
@@ -38,7 +39,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
 
     @property
     def is_active(self):

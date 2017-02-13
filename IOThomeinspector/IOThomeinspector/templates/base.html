@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <h1>IoT inspector</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'devices' %}">My Devices</a></li>
+                </ul>
+            </nav>
+        </header>
+        {% block body %}{% endblock %}
+    </body>
+</html>
