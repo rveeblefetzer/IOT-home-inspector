@@ -35,3 +35,19 @@ class UserProfile(models.Model):
     user_id = models.UUIDField(default=uuid.uuid4, editable=False)
     active = ActiveUserManager()
     objects = models.Manager()
+
+    def __str__(self):
+        return self.user.username
+
+
+    @property
+    def is_active(self):
+        """This is active property."""
+        return self.user.is_active
+
+
+@receiver(post_save, sender=User)
+def make_user_profile(sender, instance, **kwargs):
+    """Instantiate a UserProfile, connect to a new User instance, save that profile."""
+    new_profile = UserProfile(user=instance)
+        new_profile.save()
