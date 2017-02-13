@@ -9,7 +9,7 @@ import uuid
 
 DEVICE_CHOICES = (
     ("philips-hue", "Philips Hue"),
-    ("amazon-echoe","Amazon Echoe"),
+    ("amazon-echo", "Amazon Echo"),
     ("nest", "Nest"),
     ("fitbit", "FitBit")
 )
