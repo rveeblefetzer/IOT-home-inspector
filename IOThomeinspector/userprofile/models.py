@@ -49,5 +49,6 @@ class UserProfile(models.Model):
 @receiver(post_save, sender=User)
 def make_user_profile(sender, instance, **kwargs):
     """Instantiate a UserProfile, connect to a new User instance, save that profile."""
-    new_profile = UserProfile(user=instance)
-    new_profile.save()
+    if kwargs["created"]:
+        new_profile = UserProfile(user=instance)
+        new_profile.save()

@@ -25,3 +25,9 @@ class ProfileTestCase(TestCase):
     def test_reciever(self):
         """Test new users are made for profile."""
         self.assertEqual(UserProfile.objects.count(), 20)
+
+    def test_user_has_profile_attached(self):
+        """Testing for Profiles attached Users."""
+        bob = self.users[2]
+        self.assertTrue(hasattr(bob, "profile"))
+        self.assertIsInstance(bob.profile, UserProfile)
