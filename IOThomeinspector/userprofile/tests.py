@@ -42,3 +42,11 @@ class ProfileTestCase(TestCase):
         """Testing profile _str_ is username."""
         profile = UserProfile.objects.get(user=self.users[0])
         self.assertEqual(str(profile), self.users[0].username)
+
+    def test_user_profile_has_devices(self):
+        """Testing user profile has devices."""
+        profile = UserProfile.objects.get(user=self.users[0])
+        profile.devices = "nest"
+        profile.save()
+        test_user = User.objects.filter(username=profile.user.username).first()
+        self.assertTrue(test_user.profile.devices == [profile.devices])
