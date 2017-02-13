@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from two_factor.admin import AdminSiteOTPRequired
+
+admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
