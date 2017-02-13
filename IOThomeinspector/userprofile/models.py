@@ -40,7 +40,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-
     @property
     def is_active(self):
         """This is active property."""
