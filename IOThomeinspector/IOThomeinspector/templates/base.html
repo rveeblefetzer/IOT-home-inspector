@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <h1>IoT inspector</h1>
+            <nav>
+                <ul>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Login</a></li>
+                    <li><a href="">Logout</a></li>
+                    <li><a href="">My Devices</a></li>
+                </ul>
+            </nav>
+        </header>
+        {% block google %}{% endblock %}
+        {% block body %}{% endblock %}
+    </body>
+</html>
