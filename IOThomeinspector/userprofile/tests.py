@@ -50,3 +50,12 @@ class ProfileTestCase(TestCase):
         profile.save()
         test_user = User.objects.filter(username=profile.user.username).first()
         self.assertTrue(test_user.profile.devices == [profile.devices])
+
+    def test_user_profile_has_multiple_devices(self):
+        """Testing user profile has devices."""
+        profile = UserProfile.objects.get(user=self.users[0])
+        profile.devices = ["nest", "amazon-echo"]
+        profile.save()
+        test_user = User.objects.filter(username=profile.user.username).first()
+        # import pdb; pdb.set_trace()
+        self.assertTrue(len(test_user.profile.devices) == 2)
