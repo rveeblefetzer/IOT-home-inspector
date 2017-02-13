@@ -4,9 +4,15 @@ from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from multiselectfield import MultiSelectField
 import uuid
 
-
+DEVICE_CHOICES = (
+    ("philips-hue", "Philips Hue"),
+    ("amazon-echoe","Amazon Echoe"),
+    ("nest", "Nest"),
+    ("fitbit", "FitBit")
+)
 class ActiveUserManager(models.Manager):
     """Query UserProfile of active user."""
 
@@ -25,7 +31,7 @@ class UserProfile(models.Model):
         on_delete=models.CASCADE
     )
 
-
-    imager_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    devices = MultiSelectField(choices=DEVICE_CHOICES)
+    user_id = models.UUIDField(default=uuid.uuid4, editable=False)
     active = ActiveUserManager()
     objects = models.Manager()
