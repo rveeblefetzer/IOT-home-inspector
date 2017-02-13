@@ -31,3 +31,9 @@ class ProfileTestCase(TestCase):
         bob = self.users[2]
         self.assertTrue(hasattr(bob, "profile"))
         self.assertIsInstance(bob.profile, UserProfile)
+
+    def test_profile_associated_actual_users(self):
+        """Testing for profile Associated with real users."""
+        a_profile = UserProfile.objects.first()
+        self.assertTrue(hasattr(a_profile, "user"))
+        self.assertIsInstance(a_profile.user, User)
