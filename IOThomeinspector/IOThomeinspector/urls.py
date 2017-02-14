@@ -40,7 +40,7 @@ urlpatterns = [
         name='setup',
     ),
     url(r'^registration/', include('registration.backends.hmac.urls')),
-    url(r'^login/$', login, name='login'),
+    # url(r'^login/$', login, name='login'),
     url(r'^logout/$', logout, name='logout'),
     url(r'^$', HomePageView.as_view(), name='home')
 ]
