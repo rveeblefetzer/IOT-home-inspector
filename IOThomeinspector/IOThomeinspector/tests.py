@@ -3,7 +3,7 @@
 
 from django.test import TestCase
 from .google_api import make_search
-
+import bs4
 
 class SearchResaultTestCase(TestCase):
     """Tests for the make search method."""
@@ -23,8 +23,8 @@ class SearchResaultTestCase(TestCase):
 
     def test_getting_the_right_html_firmware(self):
         """Test that the html in the beautiful soup object contains the search resaults for firmware updates."""
-        self.assertTrue(str(self.soups[0].title) == '<title>philips hue firmware update - Bing</title>')
+        self.assertTrue(str(self.soups[0].title) == '<title>Philips hue firmware update - Bing</title>')
 
     def test_getting_the_right_html_security(self):
         """Test that the html in the beautiful soup object contains the search resaults for security vulnerabilities."""
-        self.assertTrue(str(self.soups[1].title) == '<title>philips hue security vulnerabilities - Bing</title>')
+        self.assertTrue(str(self.soups[1].title) == '<title>Philips hue security vulnerabilities - Bing</title>')
