@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 from two_factor.admin import AdminSiteOTPRequired
+from two_factor.urls import LoginView, SetupView
 
 admin.site.__class__ = AdminSiteOTPRequired
 
