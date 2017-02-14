@@ -8,13 +8,21 @@
     <body>
         <header>
             <h1>IoT inspector</h1>
+            {% if request.user.is_authenticated %}
+            <h4>
+            You are logged in as <a href="">{{request.user.username}}</a>
+            </h4>
+            {% endif %}
             <nav>
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'registration_register' %}">Register</a></li>
+                    {% if request.user.is_authenticated %}
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                     <li><a href="">My Devices</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'registration_register' %}">Register</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </header>

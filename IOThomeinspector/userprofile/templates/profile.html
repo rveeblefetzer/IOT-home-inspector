@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+<title>{{request.user.username}}</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+    {% if profile %}
+    <ul>
+        <li>Username: {{profile.user.username}}</li>
+        <li>Devices: <ul>
+            {% for item in profile.devices %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul></li>
+    </ul>
+    <a href="{% url 'edit_profile' %}"><button>Edit Profile</button></a>    
+    {% else %}
+    <h3>{{ error }}</h3>
+    {% endif %}
+{% endblock %}
