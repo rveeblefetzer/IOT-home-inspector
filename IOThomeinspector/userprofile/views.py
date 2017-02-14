@@ -17,7 +17,8 @@ class ProfileView(TemplateView):
         """Get profiles and return them."""
         if self.request.user.is_authenticated():
             profile = self.request.user.profile
-            return {'profile': profile}
+            devices = profile.get_devices_display().split(',')
+            return {'profile': profile, 'devices': devices}
         else:
             error_message = "You're not signed in."
             return {'error': error_message}
@@ -37,9 +38,8 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """Save model forms to database."""
         self.object = form.save()
-        self.object.user.first_name = form.cleaned_data['First Name']
-        self.object.user.last_name = form.cleaned_data['Last Name']
         self.object.user.email = form.cleaned_data['Email']
+        self.object.user.profile.devices = form.cleaned_data['devices']
         self.object.user.save()
         self.object.save()
         return redirect('profile')

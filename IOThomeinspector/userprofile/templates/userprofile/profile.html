@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>{{request.user.username}}</title>
+{{request.user.username}}
 
 {% endblock %}
 
@@ -13,7 +13,7 @@
     <ul>
         <li>Username: {{profile.user.username}}</li>
         <li>Devices: <ul>
-            {% for item in profile.devices %}
+            {% for item in devices %}
             <li>{{ item }}</li>
             {% endfor %}
         </ul></li>
