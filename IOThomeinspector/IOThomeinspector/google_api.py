@@ -25,6 +25,12 @@ def get_links(key_words):
     page_links = [[] for i in len(soups)]
     for soup in soups:
         for link in soup.find_all('a'):
-            if 'http://' in str(link.get('href')) and 'blog' not in str(link.get('href')) and 'go.microsoft' not in str(link.get('href')):
+            if 'http://' not in str(link.get('href')):
+                break
+            elif 'blog' in str(link.get('href')):
+                break
+            elif 'go.microsoft' in str(link.get('href')):
+                break
+            else:
                 page_links[soups.index(soup)].append(str(link.get('href')))
     return page_links
