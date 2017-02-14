@@ -7,16 +7,24 @@
     </head>
     <body>
         <header>
-            <h1>IoT inspector</h1>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'registration_register' %}">Register</a></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                    <li><a href="">My Devices</a></li>
-                </ul>
-            </nav>
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+          <a class="navbar-brand" href="#">IOT Home Inspector</a>
+        </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'registration_register' %}">Register</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="">My Devices</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
         </header>
         {% block body %}{% endblock %}
     </body>
