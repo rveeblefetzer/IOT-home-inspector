@@ -28,3 +28,7 @@ class SearchResaultTestCase(TestCase):
     def test_getting_the_right_html_security(self):
         """Test that the html in the beautiful soup object contains the search resaults for security vulnerabilities."""
         self.assertTrue(str(self.soups[1].title) == '<title>philips hue security vulnerabilities - Bing</title>')
+
+    def test_soups_is_list(self):
+        """Test that make search returns a list."""
+        self.assertTrue(type(self.soups) == list)
