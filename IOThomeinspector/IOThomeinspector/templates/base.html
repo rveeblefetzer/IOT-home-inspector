@@ -18,7 +18,7 @@
         <li><a href="{% url 'home' %}">Home</a></li>
         {% if request.user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
-        <li><a href="">My Devices</a></li>
+        <li><a href="{% url 'profile' %}">My Devices</a></li>
         {% else %}
         <li><a href="{% url 'login' %}">Login</a></li>
         <li><a href="{% url 'registration_register' %}">Register</a></li>
