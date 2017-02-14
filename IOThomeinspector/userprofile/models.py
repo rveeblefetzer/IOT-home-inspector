@@ -52,3 +52,8 @@ def make_user_profile(sender, instance, **kwargs):
     if kwargs["created"]:
         new_profile = UserProfile(user=instance)
         new_profile.save()
+
+
+# # Class for another app to implement two-factor auth. This sets a device for time-based one-time pad
+# class django_otp.plugins.otp_totp.models.TOTPDevice():
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL)
