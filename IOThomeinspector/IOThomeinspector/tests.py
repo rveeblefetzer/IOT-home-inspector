@@ -2,7 +2,7 @@
 
 
 from django.test import TestCase
-from google_api import make_search
+from .google_api import make_search
 
 
 class SearchResaultTestCase(TestCase):
