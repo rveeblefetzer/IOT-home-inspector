@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha384-C0X5qw1DlkeV0RDunhmi4cUBUkPDTvUqzElcNWm1NI2T4k8tKMZ+wRPQOhZfSJ9N" crossorigin="anonymous">
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
@@ -11,9 +12,9 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'registration_register' %}">Register</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
-                    <li><a href="{% url 'devices' %}">My Devices</a></li>
+                    <li><a href="">My Devices</a></li>
                 </ul>
             </nav>
         </header>

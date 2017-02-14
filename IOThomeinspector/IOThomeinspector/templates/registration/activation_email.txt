@@ -1,0 +1,5 @@
+Thanks for registering with the IOT Home Inspector.
+
+Click this link to activate your profile: http://{{ site }}/registration/activate/{{ activation_key }}
+
+YOU HAVE 7 DAYS.
