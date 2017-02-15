@@ -37,7 +37,6 @@ def get_links(key_words):
 
 def get_versions(key_words, links=None):
     """Try to find the most recent versions of firmware bsed on the relevent links."""
-    import pdb; pdb.set_trace()
     soup = None
     top_links = [
                 'http://www2.meethue.com/en-us/release-notes/bridge/'
