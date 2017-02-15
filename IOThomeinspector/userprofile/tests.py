@@ -2,6 +2,7 @@ from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
 from .models import UserProfile
 import factory
+from django.urls import reverse_lazy
 
 """Testing imports for 2 Factor Auth.
 From https://github.com/Bouke/django-two-factor-auth/blob/master/tests/test_views_login.py."""
@@ -125,11 +126,10 @@ class ProfileLoginRegisterTests(TestCase):
         }, follow=follow)
 
     def test_home_view_status_is_ok(self):
-        """Test a get request on the HomePageView."""
+        """Test a get request on the home view."""
         from IOThomeinspector.views import HomePageView
         req = self.request.get("/")
-        view = HomePageView.as_view()
-        response = view(req)
+        response = HomePageView(req)
         self.assertTrue(response.status_code == 200)
 
     def test_home_route_uses_correct_templates(self):
@@ -138,31 +138,55 @@ class ProfileLoginRegisterTests(TestCase):
         self.assertTemplateUsed(response, "home.html")
         self.assertTemplateUsed(response, "base.html")
 
-    # def test_login_route_is_status_ok(self):
-    #     """Test for a 200 status route at /login."""
-    #     response = self.client.get("/account/login/")
-    #     self.assertTrue(response.status_code == 200)
+    def test_profile_page(self):
+        """Test that login page loads corectly."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(reverse_lazy("profile"))
+        self.assertTrue(response.status_code == 200)
 
-    # def test_login_route_fails_without_2_factor(self):
-    #     """Login route redirect?."""
-    #     new_user = UserFactory.create()
-    #     new_user.set_password("tugboats")
-    #     new_user.save()
-    #     response = self.client.post("/account/login/", {
-    #         "username": new_user.username,
-    #         "password": "tugboats"
-    #     }, follow=False)
-    #     self.assertTrue(response.status_code == 302)
+    def test_search_page_not_logged_in(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue('kwcontext' in response.context)
 
-    # def test_login_route_redirects_to_home(self):
-    #     """Login route redirect to homepage?."""
-    #     new_user = UserFactory.create()
-    #     new_user.set_password("tugboats")
-    #     new_user.save()
-    #     response = self.client.post("/account/login/", {
-    #         "username": new_user.username,
-    #         "password": "tugboats"}, follow=True)
-    #     self.assertTrue(response.redirect_chain[0][0] == '/')
+    def test_search_page_not_logged_in2(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue(len(response.context['kwcontext']) > 0)
+
+    def test_search_page_logged_in(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue('kwcontext' in response.context)
+
+    def test_search_page_logged_in2(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue(len(response.context['kwcontext']) > 0)
+
+    def test_search_profile_page_logged_in(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue('kwcontext' in response.context)
+
+    def test_search_profile_page_logged_in2(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue(len(response.context['kwcontext']) > 0)
 
 
 """These are the 2 Factor Authorization tests from ."""
@@ -206,26 +230,13 @@ class LoginTest(UserMixin, TestCase):
         response = self.client.get('/profile/')
         self.assertNotIn(b"You are logged in as", response.content)
 ###
-    # def test_login_editing_profile_redirects_to_profile(self):
-    #     """Test that a profile edit 302s to profile view."""
-    #     user = UserFactory.create()
-    #     user.save()
-    #     self.client.force_login(user)
-    #     response = self.client.get('/edit_profile/')
-    #     form.save()
-    #     self.assertContains(response, status_code=301)
-
-
-    @mock.patch('two_factor.views.core.signals.user_verified.send')
-    def test_valid_login(self, mock_signal):
-        self.create_user()
-        response = self._post({'auth-username': 'bouke@example.com',
-                               'auth-password': 'secret',
-                               'login_view-current_step': 'auth'})
-        self.assertRedirects(response, resolve_url(settings.LOGIN_REDIRECT_URL))
-
-        # No signal should be fired for non-verified user logins.
-        self.assertFalse(mock_signal.called)
+    def test_login_editing_profile_redirects_to_profile(self):
+        """Test that a profile edit 302s to profile view."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(reverse_lazy('profile'))
+        self.assertTrue(response.status_code == 200)
 
     def test_valid_login_with_custom_redirect(self):
         redirect_url = reverse('two_factor:setup')
@@ -264,63 +275,6 @@ class LoginTest(UserMixin, TestCase):
         # Check that the signal was fired.
         mock_signal.assert_called_with(sender=mock.ANY, request=mock.ANY, user=user, device=device)
 
-    @mock.patch('two_factor.gateways.fake.Fake')
-    @mock.patch('two_factor.views.core.signals.user_verified.send')
-    @override_settings(
-        TWO_FACTOR_SMS_GATEWAY='two_factor.gateways.fake.Fake',
-        TWO_FACTOR_CALL_GATEWAY='two_factor.gateways.fake.Fake',
-    )
-    def test_with_backup_phone(self, mock_signal, fake):
-        user = self.create_user()
-        for no_digits in (6, 8):
-            with self.settings(TWO_FACTOR_TOTP_DIGITS=no_digits):
-                user.totpdevice_set.create(name='default', key=random_hex().decode(),
-                                           digits=no_digits)
-                device = user.phonedevice_set.create(name='backup', number='+31101234567',
-                                                     method='sms',
-                                                     key=random_hex().decode())
-
-                # Backup phones should be listed on the login form
-                response = self._post({'auth-username': 'bouke@example.com',
-                                       'auth-password': 'secret',
-                                       'login_view-current_step': 'auth'})
-                self.assertContains(response, 'Send text message to +31 ** *** **67')
-
-                # Ask for challenge on invalid device
-                response = self._post({'auth-username': 'bouke@example.com',
-                                       'auth-password': 'secret',
-                                       'challenge_device': 'MALICIOUS/INPUT/666'})
-                self.assertContains(response, 'Send text message to +31 ** *** **67')
-
-                # Ask for SMS challenge
-                response = self._post({'auth-username': 'bouke@example.com',
-                                       'auth-password': 'secret',
-                                       'challenge_device': device.persistent_id})
-                self.assertContains(response, 'We sent you a text message')
-                fake.return_value.send_sms.assert_called_with(
-                    device=device,
-                    token=str(totp(device.bin_key, digits=no_digits)).zfill(no_digits))
-
-                # Ask for phone challenge
-                device.method = 'call'
-                device.save()
-                response = self._post({'auth-username': 'bouke@example.com',
-                                       'auth-password': 'secret',
-                                       'challenge_device': device.persistent_id})
-                self.assertContains(response, 'We are calling your phone right now')
-                fake.return_value.make_call.assert_called_with(
-                    device=device,
-                    token=str(totp(device.bin_key, digits=no_digits)).zfill(no_digits))
-
-            # Valid token should be accepted.
-            response = self._post({'token-otp_token': totp(device.bin_key),
-                                   'login_view-current_step': 'token'})
-            self.assertRedirects(response, resolve_url(settings.LOGIN_REDIRECT_URL))
-            self.assertEqual(device.persistent_id,
-                             self.client.session.get(DEVICE_ID_SESSION_KEY))
-
-            # Check that the signal was fired.
-            mock_signal.assert_called_with(sender=mock.ANY, request=mock.ANY, user=user, device=device)
 
     @mock.patch('two_factor.views.core.signals.user_verified.send')
     def test_with_backup_token(self, mock_signal):
