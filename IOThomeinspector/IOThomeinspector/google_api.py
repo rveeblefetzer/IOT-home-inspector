@@ -20,6 +20,7 @@ def make_search(key_words):
 def get_links(key_words):
     """Takes in user input as key words and returns a list containnig lists of relevent links from each extension in the function above.."""
     soups = make_search(key_words)
+    version_number = get_versions(key_words, soups)
     filters = ['go.microsoft', 'blog']
     page_links = [[] for i in range(len(soups))]
     for soup in soups:
@@ -31,15 +32,15 @@ def get_links(key_words):
             elif 'go.microsoft' in str(link.get('href')):
                 pass
             else:
-                page_links[soups.index(soup)].append(str(link.get('href')))
-    return page_links
+                page_links[soups.index(soup)].append((str(link.get('href')),str(link.get('title'))))
+    return (page_links, version_number)
 
 
-def get_versions(key_words, links=None):
+def get_versions(key_words, links):
     """Try to find the most recent versions of firmware bsed on the relevent links."""
     soup = None
     top_links = [
-                'http://www2.meethue.com/en-us/release-notes/bridge/'
+                'http://www2.meethue.com/en-us/release-notes/bridge/',
                 'https://nest.com/support/article/Nest-Learning-Thermostat-software-update-history',
                 'https://nest.com/support/article/Nest-Cam-and-Dropcam-software-update-history',
                 'https://nest.com/support/article/Nest-Protect-software-update-history',
@@ -68,19 +69,48 @@ def get_versions(key_words, links=None):
 
 def scrape_soup(key_words, soup):
     """Scrape the soup for the most recent version number"""
-    hot_words = ['version:', 'Version:', 'version', 'Version', 'V', 'v', 'firmware', 'software', 'Firmware', 'Software']
-    elements = soup.find_all()
-    flags = [0 for i in elements]
-    for element in elements:
-        for word in hot_words:
-            if word in str(element):
-                for kword in key_words.split(' '):
-                    if kword.lower() in str(element).lower():
-                        flags[elements.index(element)] += 1
-    element = elements[flags.index(max(flags))]
-    element = str(element).split(' ')
-    try:
-        if int(element[element.index(word) + 1][0]):
-            return str(element[element.index(word) + 1])
-    except ValueError:
-        return 'We could not find the most recent software/firmware version of you device, hopefully these links will help.'
+    hot_words = ['version:', 'Version:', 'version', 'Version', 'firmware', 'software', 'Firmware', 'Software']
+    highest_priority_val = 0
+    highest_priority_num = ''
+    for word in key_words.split(' '):
+        hot_words.append(word)
+    probable_numbers = {}
+    page_text = soup.get_text()
+    page_text = page_text.replace('\n', ' ')
+    page_text = page_text.split(' ')
+    page_text = [x for x in page_text if x != '']
+    for word in page_text:
+        try:
+            if word == '':
+                continue
+            elif type(int(word[0])) is int and type(int(word[-1])) is int:
+                probable_numbers[word] = 0
+                for index in page_text[page_text.index(word) - 5:page_text.index(word)]:
+                    for hword in hot_words:
+                        if hword in index:
+                            probable_numbers[word] += 1
+        except ValueError:
+            continue
+    import pdb; pdb.set_trace()
+    for num in probable_numbers.keys():
+        try:
+            if probable_numbers[num] > highest_priority_val:
+                highest_priority_val = probable_numbers[num]
+                highest_priority_num = num
+            elif probable_numbers[num] == highest_priority_val:
+                compare_new = num.split('.')
+                compare_curr = highest_priority_num.split('.')
+                for index_compare in range(len(compare_new)):
+                    try:
+                        if int(compare_new[index_compare]) > int(compare_curr[index_compare]):
+                            highest_priority_val = probable_numbers[num]
+                            highest_priority_num = num
+                    except IndexError:
+                        highest_priority_val = probable_numbers[num]
+                        highest_priority_num = num
+            print(num, probable_numbers[num])
+        except ValueError:
+            continue
+    if highest_priority_num == '':
+        return 'We could not find the most recent software/firmware version of you device, hopefully these links will help. If you want to search again try being more specific.'
+    return highest_priority_num
