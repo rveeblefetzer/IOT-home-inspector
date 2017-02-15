@@ -2,7 +2,7 @@
 
 
 from django.test import TestCase, Client
-from .google_api import make_search, get_links
+from .google_api import make_search, get_links, get_versions
 import bs4
 from django.test.testcases import SimpleTestCase
 
@@ -65,4 +65,16 @@ class LinkFilterTestCase(TestCase):
 #     response = test_browser.get('/')
 #     response.content.assertContains('Chrome')
 
+
+class GetVersionsTestCase(TestCase):
+    """Tests for get versions function."""
+
+    def setUp(self):
+        """Set up."""
+        self.search_anticipated = get_versions('Philips hue')
+        self.search_not_anticipated = get_versions('Samsung Family hub')
+
+    def test_return_for_preset_url(self):
+        """Test that when the user searches for an item we acounted for it returns a predictable number."""
+        self.assertTrue(self.search_anticipated ==  '01036659')
 
