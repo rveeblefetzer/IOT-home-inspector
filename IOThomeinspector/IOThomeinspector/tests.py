@@ -14,7 +14,7 @@ class SearchResaultTestCase(TestCase):
 
     def test_soups_return(self):
         """Test that the soups list being returned is getting appended to."""
-        self.assertTrue(len(self.soups) == 2)
+        self.assertTrue(len(self.soups) == 3)
 
     def test_type_of_items_in_soups_is_beautiful_soup(self):
         """Test that the items in the soups list getting returned are beautiful soup objects."""
