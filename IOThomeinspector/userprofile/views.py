@@ -37,9 +37,6 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         """Get the user profile object."""
-        if 'search' in self.request.POST.keys():
-            def post(self, request, *args, **kwargs):
-                return HomePageView(request)
         return self.request.user.profile
 
     def form_valid(self, form):

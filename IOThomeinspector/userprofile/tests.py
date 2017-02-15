@@ -189,7 +189,6 @@ class ProfileLoginRegisterTests(TestCase):
         self.assertTrue(len(response.context['kwcontext']) > 0)
 
 
-
 """These are the 2 Factor Authorization tests from ."""
 
 
