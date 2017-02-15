@@ -2,6 +2,7 @@ from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
 from .models import UserProfile
 import factory
+from django.urls import reverse_lazy
 
 """Testing imports for 2 Factor Auth.
 From https://github.com/Bouke/django-two-factor-auth/blob/master/tests/test_views_login.py."""
@@ -137,31 +138,14 @@ class ProfileLoginRegisterTests(TestCase):
         self.assertTemplateUsed(response, "home.html")
         self.assertTemplateUsed(response, "base.html")
 
-    # def test_login_route_is_status_ok(self):
-    #     """Test for a 200 status route at /login."""
-    #     response = self.client.get("/account/login/")
-    #     self.assertTrue(response.status_code == 200)
+    def test_profile_page(self):
+        """Test that login page loads corectly."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get(reverse_lazy("profile"))
+        self.assertTrue(response.status_code == 200)
 
-    # def test_login_route_fails_without_2_factor(self):
-    #     """Login route redirect?."""
-    #     new_user = UserFactory.create()
-    #     new_user.set_password("tugboats")
-    #     new_user.save()
-    #     response = self.client.post("/account/login/", {
-    #         "username": new_user.username,
-    #         "password": "tugboats"
-    #     }, follow=False)
-    #     self.assertTrue(response.status_code == 302)
-
-    # def test_login_route_redirects_to_home(self):
-    #     """Login route redirect to homepage?."""
-    #     new_user = UserFactory.create()
-    #     new_user.set_password("tugboats")
-    #     new_user.save()
-    #     response = self.client.post("/account/login/", {
-    #         "username": new_user.username,
-    #         "password": "tugboats"}, follow=True)
-    #     self.assertTrue(response.redirect_chain[0][0] == '/')
 
 
 """These are the 2 Factor Authorization tests from ."""
@@ -210,9 +194,8 @@ class LoginTest(UserMixin, TestCase):
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.get('/profile/')
-        form.save()
-        self.assertContains(response, status_code=301)
+        response = self.client.get(reverse_lazy('profile'))
+        self.assertTrue(response.status_code == 200)
 
     def test_valid_login_with_custom_redirect(self):
         redirect_url = reverse('two_factor:setup')
