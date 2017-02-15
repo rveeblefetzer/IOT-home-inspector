@@ -6,12 +6,16 @@ from .models import UserProfile
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, UpdateView
 from django.shortcuts import redirect
+from IOThomeinspector.views import HomePageView
 
 
 class ProfileView(TemplateView):
     """Return the Profile View inheriting from TemplateView."""
 
     template_name = 'userprofile/profile.html'
+
+    def post(self, request, *args, **kwargs):
+        return HomePageView(request)
 
     def get_context_data(self, username=None):
         """Get profiles and return them."""
@@ -33,6 +37,9 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         """Get the user profile object."""
+        if 'search' in self.request.POST.keys():
+            def post(self, request, *args, **kwargs):
+                return HomePageView(request)
         return self.request.user.profile
 
     def form_valid(self, form):
