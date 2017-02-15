@@ -229,3 +229,9 @@
 .navigation-clean-search .navbar-form .search-field:focus {
   border-bottom:1px solid #ccc;
 }
+
+a.text-uppercase {
+  color:#dfe8ee;
+  padding-left:18px;
+  padding-right:18px;
+}
