@@ -183,6 +183,39 @@ class LoginTest(UserMixin, TestCase):
         self.assertContains(response, 'Please enter a correct')
         self.assertContains(response, 'and password.')
 
+    def test_valid_login_with_custom_redirect(self):
+        redirect_url = reverse('two_factor:setup')
+        self.create_user()
+        response = self.client.post(
+            '%s?%s' % (reverse('two_factor:login'), 'next=' + redirect_url),
+            {'auth-username': 'bouke@example.com',
+             'auth-password': 'secret',
+             'login_view-current_step': 'auth'})
+        self.assertRedirects(response, redirect_url)
+
+    def test_login_enables_profile_view(self):
+        """Test that a logged-in user can access profile view."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get('/profile/')
+        self.assertIn(b"You are logged in as", response.content)
+
+    def test_not_logged_in_enables_no_profile_view(self):
+        """Test that user can't access profile view without logging in."""
+        response = self.client.get('/profile/')
+        self.assertNotIn(b"You are logged in as", response.content)
+###
+    # def test_login_editing_profile_redirects_to_profile(self):
+    #     """Test that a profile edit 302s to profile view."""
+    #     user = UserFactory.create()
+    #     user.save()
+    #     self.client.force_login(user)
+    #     response = self.client.get('/edit_profile/')
+    #     form.save()
+    #     self.assertContains(response, status_code=301)
+
+
     @mock.patch('two_factor.views.core.signals.user_verified.send')
     def test_valid_login(self, mock_signal):
         self.create_user()
