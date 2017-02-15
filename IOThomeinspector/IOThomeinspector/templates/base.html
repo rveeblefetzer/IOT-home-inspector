@@ -30,6 +30,7 @@
                 </ul>
             </div>
         </div>
+        {% if 'edit' not in request.path %}
         <form class="navbar-form navbar-left search-form" method="POST">
             {% csrf_token %}
             <div class="input-group">
@@ -40,6 +41,7 @@
                 </div>
             </div>
         </form>
+        {% endif %}
         </div>
             {% if request.user.is_authenticated %}
             <a class="navbar-brand" href="{% url 'profile' %}">
@@ -52,7 +54,6 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.min.js"></script>
     </nav>
     </header>
     {% block body %}{% endblock %}
