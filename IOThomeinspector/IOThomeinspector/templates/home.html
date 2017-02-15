@@ -9,5 +9,19 @@
     <p>Welcome to the Internet of Things Home Inspector. In the box below/above/whatever, enter the manufacturer and model of the device in question to see its latest software and/or firmware version.</p>
 
     <p>If you'd like to register, you can keep a list of your devices to simplify checking.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="search"></label>
+        <input type="text" name="search"/>
+        <button type="click"> Search </button>
+    </form>
+
+    <ul>
+        {% for item in kwcontext %}
+            <li>{{item}}</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 

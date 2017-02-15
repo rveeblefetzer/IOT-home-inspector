@@ -17,10 +17,9 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
 from two_factor.admin import AdminSiteOTPRequired
-from django.contrib.auth.views import login, logout
+from django.contrib.auth.views import logout
 from django.views.static import serve
 from django.conf.urls.static import static
-from IOThomeinspector import settings
 from IOThomeinspector.views import HomePageView
 from two_factor.urls import LoginView, SetupView
 
@@ -28,6 +27,7 @@ admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', HomePageView, name='home'),
     url(r'', include('two_factor.urls', 'two_factor')),
     url(
         regex=r'^account/login/$',
@@ -40,7 +40,6 @@ urlpatterns = [
         name='setup',
     ),
     url(r'^registration/', include('registration.backends.hmac.urls')),
-    # url(r'^login/$', login, name='login'),
     url(r'^logout/$', logout, name='logout'),
-    url(r'^$', HomePageView.as_view(), name='home')
+    url(r'^profile/', include('userprofile.urls'))
 ]
