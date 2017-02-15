@@ -23,7 +23,6 @@ def get_links(key_words):
     filters = ['go.microsoft', 'blog']
     page_links = [[] for i in range(len(soups))]
     for soup in soups:
-        print(soup.title)
         for link in soup.find_all('a'):
             if 'http://' not in str(link.get('href')):
                 pass
@@ -36,8 +35,10 @@ def get_links(key_words):
     return page_links
 
 
-def get_versions(key_words, links):
+def get_versions(key_words, links=None):
     """Try to find the most recent versions of firmware bsed on the relevent links."""
+    import pdb; pdb.set_trace()
+    soup = None
     top_links = [
                 'http://www2.meethue.com/en-us/release-notes/bridge/'
                 'https://nest.com/support/article/Nest-Learning-Thermostat-software-update-history',
@@ -61,8 +62,9 @@ def get_versions(key_words, links):
     #if the user is not searching for something we acounted for we search through all the relavent links and find what we believe to be the most recent version number.
     for link in links:
         soup = BeautifulSoup(requests.get(link, auth=('user', 'pass')).text, 'html.parser')
-        if type(scrape_soup(key_words, soup)) == float:
+        if scrape_soup(key_words, soup) != 'We could not find the most recent software/firmware version of you device, hopefully these links will help.':
             return scrape_soup(key_words, soup)
+    return scrape_soup(key_words, soup)
         
 
 def scrape_soup(key_words, soup):
@@ -79,6 +81,7 @@ def scrape_soup(key_words, soup):
     element = elements[flags.index(max(flags))]
     element = str(element).split(' ')
     try:
-        return float(element[element.index(word) + 1])
+        if int(element[element.index(word) + 1][0]):
+            return str(element[element.index(word) + 1])
     except ValueError:
         return 'We could not find the most recent software/firmware version of you device, hopefully these links will help.'
