@@ -1,38 +1,61 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha384-C0X5qw1DlkeV0RDunhmi4cUBUkPDTvUqzElcNWm1NI2T4k8tKMZ+wRPQOhZfSJ9N" crossorigin="anonymous">
-        <title>{% block title %}{% endblock %}</title>
-    </head>
-    <body>
-        <header>
-        <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
-            <div class="navbar-header">
-          <a class="navbar-brand" href="#">IOT Home Inspector</a>
-        </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="{% url 'home' %}">Home</a></li>
-        {% if request.user.is_authenticated %}
-        <li><a href="{% url 'logout' %}">Logout</a></li>
-        <li><a href="{% url 'profile' %}">My Devices</a></li>
-        {% else %}
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'registration_register' %}">Register</a></li>
-        {% endif %}
-      </ul>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href='{% static "modules.css" %}'>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <div></div>
+    <nav class="navbar navbar-default navbar-static-top navigation-clean-search">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand navbar-link" href="{% url 'home' %}">IOT HomeInspector</a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    {% if request.user.is_authenticated %}
+                    <a class="text-uppercase" href="{% url 'logout' %}"><li class="active" role="presentation">Logout</li></a>
+                    <a class="text-uppercase" href="{% url 'profile' %}"><li class="active" role="presentation">My Devices</li></a>
+                    {% else %}
+                    <a class="text-uppercase" href="{% url 'login' %}"><li class="active" role="presentation">log in</li></a>
+                </ul><a class="btn btn-default btn-lg navbar-btn action-button" role="button" href="{% url 'registration_register' %}">Sign Up</a> {% endif %}
+                </ul>
+            </div>
+        </div>
+        <form class="navbar-form navbar-left search-form" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <div class="input-group-addon"><span><i class="glyphicon glyphicon-search"></i></span></div>
+                <input class="form-control" name="search" type="text" placeholder="I am looking for..">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="click">Search </button>
+                </div>
+            </div>
+        </form>
+        </div>
+            {% if request.user.is_authenticated %}
+            <a class="navbar-brand" href="{% url 'profile' %}">
+            <h4>You are logged in as {{request.user.username}}</h4>
+            </a> {% endif %}
+        </div>
+    </nav><img class="img-responsive" src="{% static 'image/IoT_2_transparent.png.png' %}">
+    <div id="degradado" class="gradient"></div>
+    <div>     
     </div>
-  </div>
-    {% if request.user.is_authenticated %}
-    <a class="navbar-brand" href="{% url 'profile' %}"><h4>
-    You are logged in as {{request.user.username}}
-    </h4></a>
-    {% endif %}
-</nav>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/js/script.min.js"></script>
+    </nav>
     </header>
-        {% block body %}{% endblock %}
-    </body>
+    {% block body %}{% endblock %}
+</body>
+
 </html>
