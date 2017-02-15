@@ -91,7 +91,6 @@ def scrape_soup(key_words, soup):
                             probable_numbers[word] += 1
         except ValueError:
             continue
-    import pdb; pdb.set_trace()
     for num in probable_numbers.keys():
         try:
             if probable_numbers[num] > highest_priority_val:
