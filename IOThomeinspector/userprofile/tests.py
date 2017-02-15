@@ -17,7 +17,9 @@ try:
     from unittest import mock
 except ImportError:
     import mock
-
+from django.dispatch import receiver
+from django.contrib.sites.shortcuts import get_current_site
+from two_factor.signals import user_verified
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -164,8 +166,7 @@ class ProfileLoginRegisterTests(TestCase):
     #         "password": "tugboats"}, follow=True)
     #     self.assertTrue(response.redirect_chain[0][0] == '/')
 
-
-"""These are the 2 Factor Authorization tests from ."""
+"""These are the 2 Factor Authorization tests."""
 
 
 class LoginTest(UserMixin, TestCase):
@@ -203,6 +204,29 @@ class LoginTest(UserMixin, TestCase):
              'auth-password': 'secret',
              'login_view-current_step': 'auth'})
         self.assertRedirects(response, redirect_url)
+
+    def test_login_enables_profile_view(self):
+        """Test that a logged-in user can access profile view."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get('/profile/')
+        self.assertIn(b"You are logged in as", response.content)
+
+    def test_not_logged_in_enables_no_profile_view(self):
+        """Test that user can't access profile view without logging in."""
+        response = self.client.get('/profile/')
+        self.assertNotIn(b"You are logged in as", response.content)
+###
+    def test_login_editing_profile_redirects_to_profile(self):
+        """Test that a profile edit 302s to profile view."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.get('/edit_profile/')
+        form.save()
+        self.assertContains(response, status_code=301)
+
 
     @mock.patch('two_factor.views.core.signals.user_verified.send')
     def test_with_generator(self, mock_signal):
