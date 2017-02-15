@@ -156,6 +156,23 @@ class ProfileLoginRegisterTests(TestCase):
         response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
         self.assertTrue(len(response.context['kwcontext']) > 0)
 
+    def test_search_page_logged_in(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue('kwcontext' in response.context)
+
+    def test_search_page_logged_in2(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
+        self.assertTrue(len(response.context['kwcontext']) > 0)
+
+
 
 
 """These are the 2 Factor Authorization tests from ."""
