@@ -11,11 +11,10 @@ def HomePageView(request):
     if request.method == "POST":
         keywords = request.POST['search']
         makelist = get_links(keywords)
-        kwcontext = []
-        for sublist in makelist:
-            for item in sublist:
-                kwcontext.append(item)
-        return render(request, 'home.html', {"kwcontext": kwcontext})
+        sf_links_titles = [pair for pair in makelist[0][0]]
+        sec_links_titles = [pair for pair in makelist[0][1]]
+        version = makelist[1]
+        return render(request, 'home.html', {"sf_links_titles": sf_links_titles, "sec_links_titles": sec_links_titles, "version": version})
     try:
         ua_profile = request.META['HTTP_USER_AGENT'].split()
         check = True

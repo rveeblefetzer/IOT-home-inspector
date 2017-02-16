@@ -19,8 +19,8 @@ def make_search(key_words):
 
 def get_links(key_words):
     """Takes in user input as key words and returns a list containnig lists of relevent links from each extension in the function above.."""
+    links = []
     soups = make_search(key_words)
-    version_number = get_versions(key_words, soups)
     filters = ['go.microsoft', 'blog']
     page_links = [[] for i in range(len(soups))]
     for soup in soups:
@@ -32,8 +32,11 @@ def get_links(key_words):
             elif 'go.microsoft' in str(link.get('href')):
                 pass
             else:
-                page_links[soups.index(soup)].append((str(link.get('href')),str(link.get('title'))))
-    return (page_links, version_number)
+                page_links[soups.index(soup)].append((str(link.get('href')),str(link.get_text())))
+                if soup is soups[2]:
+                    links.append(link)
+    version_number = 'The most recent version number we could find is ' + get_versions(key_words, links)
+    return (page_links[:2], version_number)
 
 
 def get_versions(key_words, links):
@@ -107,7 +110,6 @@ def scrape_soup(key_words, soup):
                     except IndexError:
                         highest_priority_val = probable_numbers[num]
                         highest_priority_num = num
-            print(num, probable_numbers[num])
         except ValueError:
             continue
     if highest_priority_num == '':
