@@ -27,7 +27,7 @@ admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', HomePageView.as_view(), name='home'),
+    url(r'^$', HomePageView, name='home'),
     url(r'', include('two_factor.urls', 'two_factor')),
     url(
         regex=r'^account/login/$',

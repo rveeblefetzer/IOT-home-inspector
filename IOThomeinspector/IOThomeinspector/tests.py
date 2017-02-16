@@ -1,11 +1,12 @@
-"""IOTehoeinspector test file."""
+"""IOThomeinspector test file."""
 
 
-from django.test import TestCase
-from .google_api import make_search, get_links
+from django.test import TestCase, Client
+from .google_api import make_search, get_links, get_versions
 import bs4
+from django.test.testcases import SimpleTestCase
 
-class SearchResaultTestCase(TestCase):
+class SearchResultTestCase(TestCase):
     """Tests for the make search method."""
 
     def setUp(self):
@@ -57,4 +58,23 @@ class LinkFilterTestCase(TestCase):
         for links in self.links:
             for link in links:
                 self.assertTrue(type(link) == str)
+
+# class UserAgentHomeViewTestCase(TestCase):
+#     """Test that home view returns user-agent info on browser."""
+#     test_browser = Client(HTTP_USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3011.0 Safari/537.36')
+#     response = test_browser.get('/')
+#     response.content.assertContains('Chrome')
+
+
+class GetVersionsTestCase(TestCase):
+    """Tests for get versions function."""
+
+    def setUp(self):
+        """Set up."""
+        self.search_anticipated = get_versions('Philips hue')
+        self.search_not_anticipated = get_versions('Samsung Family hub')
+
+    def test_return_for_preset_url(self):
+        """Test that when the user searches for an item we acounted for it returns a predictable number."""
+        self.assertTrue(self.search_anticipated ==  '01036659')
 

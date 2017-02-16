@@ -27,7 +27,7 @@ SECRET_KEY = 'y*5jjvgpek!mfhq1@zpvs5!a3s18^0fs550u(8d=1bq9v=82*@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.202.203.134', 'ec2-54-202-203-134.us-west-2.compute.amazonaws.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -135,6 +135,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 # Login pages for two-factor authentication
@@ -155,8 +156,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'conor.clary@gmail.com'
-
+EMAIL_HOST_USER = 'codefellowsdjango401imager@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
 
 #LOGIN/LOGOUT URLS
