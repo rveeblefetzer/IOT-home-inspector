@@ -148,45 +148,98 @@ class ProfileLoginRegisterTests(TestCase):
 
     def test_search_page_not_logged_in(self):
         """Search should be ok whether logged in or not."""
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sf_links_titles' in response.context)
 
     def test_search_page_not_logged_in2(self):
         """Search should be ok whether logged in or not."""
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sf_links_titles']) > 0)
+
+    def test_search_page_not_logged_in3(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sec_links_titles' in response.context)
+
+    def test_search_page_not_logged_in4(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sec_links_titles']) > 0)
+
+    def test_search_page_not_logged_in5(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('version' in response.context)
 
     def test_search_page_logged_in(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sf_links_titles' in response.context)
 
     def test_search_page_logged_in2(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sf_links_titles']) > 0)
+
+    def test_search_page_logged_in3(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sec_links_titles']) > 0)
+
+    def test_search_page_logged_in4(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('The most recent version number we could find' in response.context['version'])
 
     def test_search_profile_page_logged_in(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('profile'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sec_links_titles' in response.context)
 
     def test_search_profile_page_logged_in2(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('profile'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('version' in response.context)
 
 
 """These are the 2 Factor Authorization tests from ."""

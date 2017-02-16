@@ -2,7 +2,7 @@
 
 
 from django.test import TestCase, Client
-from .google_api import make_search, get_links, get_versions
+from .google_api import make_search, get_links, get_versions, scrape_soup
 import bs4
 from django.test.testcases import SimpleTestCase
 
@@ -71,10 +71,11 @@ class GetVersionsTestCase(TestCase):
 
     def setUp(self):
         """Set up."""
-        self.search_anticipated = get_versions('Philips hue')
-        self.search_not_anticipated = get_versions('Samsung Family hub')
+        self.links = get_links('Samsung Family hub')
+        self.search_anticipated = get_versions('Philips hue', self.links)
+        self.search_not_anticipated = get_versions('Samsung Family hub', self.links)
 
     def test_return_for_preset_url(self):
-        """Test that when the user searches for an item we acounted for it returns a predictable number."""
-        self.assertTrue(self.search_anticipated ==  '01036659')
+        """Test when user searches an item we accounted for, it returns a predictable number."""
+        self.assertTrue(self.search_anticipated == '01036659')
 
