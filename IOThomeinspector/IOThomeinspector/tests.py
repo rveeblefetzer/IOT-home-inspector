@@ -45,19 +45,18 @@ class LinkFilterTestCase(TestCase):
 
     def test_link_buckets_type(self):
         """Test that the return of get links is a list of lists."""
-        for links in self.links:
+        for links in self.links[0]:
             self.assertTrue(type(links) == list)
 
     def test_link_list_length(self):
         """Test that the length of the list returned by get links is the same as the number of search extensions we have."""
-        length = len(self.soups)
-        self.assertTrue(len(self.links) == length)
+        self.assertTrue(len(self.links) == 2)
 
     def test_link_type(self):
         """Test that the type of the links is a string."""
-        for links in self.links:
+        for links in self.links[0]:
             for link in links:
-                self.assertTrue(type(link) == str)
+                self.assertTrue(type(link[0]) == str)
 
 # class UserAgentHomeViewTestCase(TestCase):
 #     """Test that home view returns user-agent info on browser."""
@@ -71,7 +70,16 @@ class GetVersionsTestCase(TestCase):
 
     def setUp(self):
         """Set up."""
-        self.links = get_links('Samsung Family hub')
+        self.links = []
+        for link in make_search('Samsung Family hub')[2].find_all('a'):
+            if 'http://' not in str(link.get('href')):
+                pass
+            elif 'blog' in str(link.get('href')):
+                pass
+            elif 'go.microsoft' in str(link.get('href')):
+                pass
+            else:
+                self.links.append(link)
         self.search_anticipated = get_versions('Philips hue', self.links)
         self.search_not_anticipated = get_versions('Samsung Family hub', self.links)
 
