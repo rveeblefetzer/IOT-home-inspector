@@ -44,27 +44,18 @@ def get_versions(key_words, links):
     soup = None
     top_links = [
                 'http://www2.meethue.com/en-us/release-notes/bridge/',
-                'https://nest.com/support/article/Nest-Learning-Thermostat-software-update-history',
-                'https://nest.com/support/article/Nest-Cam-and-Dropcam-software-update-history',
-                'https://nest.com/support/article/Nest-Protect-software-update-history',
                 'https://www.amazon.com/gp/help/customer/display.html/ref=as_li_ss_tl?nodeId=201602210&linkCode=ll2&tag=lovemyecho-20&linkId=0ce46b6aac3da632049edf10ad05bffd',
     ]
     #check to see if what the user is searching for is an item we have acounted for and if it is return the most recents version number from its page.
     if 'philips' in key_words.lower() and 'hue' in key_words.lower():
         soup = BeautifulSoup(requests.get(top_links[0], auth=('user', 'pass')).text, 'html.parser')
-    elif 'nest' in key_words.lower() and 'thermostat' in key_words.lower():
-        soup = BeautifulSoup(requests.get(top_links[1], auth=('user', 'pass')).text, 'html.parser')
-    elif 'nest' in key_words.lower() and 'dropcam' in key_words.lower():
-        soup = BeautifulSoup(requests.get(top_links[2], auth=('user', 'pass')).text, 'html.parser')
-    elif 'nest' in key_words.lower() and 'protect' in key_words.lower():
-        soup = BeautifulSoup(requests.get(top_links[3], auth=('user', 'pass')).text, 'html.parser')
     elif 'amazon' in key_words.lower() and 'echo' in key_words.lower():
         soup = BeautifulSoup(requests.get(top_links[4], auth=('user', 'pass')).text, 'html.parser')
     if soup:
         return scrape_soup(key_words, soup)
     #if the user is not searching for something we acounted for we search through all the relavent links and find what we believe to be the most recent version number.
     for link in links:
-        soup = BeautifulSoup(requests.get(link, auth=('user', 'pass')).text, 'html.parser')
+        soup = BeautifulSoup(requests.get(link.get('href'), auth=('user', 'pass')).text, 'html.parser')
         if scrape_soup(key_words, soup) != 'We could not find the most recent software/firmware version of you device, hopefully these links will help.':
             return scrape_soup(key_words, soup)
     return scrape_soup(key_words, soup)
