@@ -21,7 +21,6 @@ def get_links(key_words):
     """Takes in user input as key words and returns a list containnig lists of relevent links from each extension in the function above.."""
     links = []
     soups = make_search(key_words)
-    filters = ['go.microsoft', 'blog']
     page_links = [[] for i in range(len(soups))]
     for soup in soups:
         for link in soup.find_all('a'):

@@ -156,7 +156,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'codefellowsdjango401imager@gmail.com'
+EMAIL_HOST_USER = 'iothomeinspector@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
 
 #LOGIN/LOGOUT URLS
