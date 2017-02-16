@@ -320,6 +320,15 @@ class ProfileLoginRegisterTests(TestCase):
                                     follow=True)
         self.assertTrue('version' in response.context)
 
+    def test_edit_profile_page(self):
+        """Test edit a profile."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('edit_profile'),
+                                    {'Email': 'Philips@Hue.com'},
+                                    follow=True)
+        self.assertTrue(response.status_code == 200)
 
 """These are the 2 Factor Authorization tests from ."""
 
