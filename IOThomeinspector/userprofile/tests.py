@@ -132,6 +132,83 @@ class ProfileLoginRegisterTests(TestCase):
         response = HomePageView(req)
         self.assertTrue(response.status_code == 200)
 
+    def test_home_view_status_is_ok2(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Chrome/56.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Chrome/56.3, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok3(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Firefox/56.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Firefox/56.3, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok4(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Safari/10.5'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Safari/10.5, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok5(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Chrome/50.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Chrome/50.3, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok6(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Firefox/49'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Firefox/49, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok7(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Safari/8'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Safari/8, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok8(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Opera'
+        response = HomePageView(req)
+        self.assertTrue(
+            "You are using Opera, we do not know if you are up to date!" in
+            str(response.content))
+
+    def test_home_view_status_is_ok9(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        response = HomePageView(req)
+        self.assertTrue('You are using' not in str(response.content))
+
     def test_home_route_uses_correct_templates(self):
         """Test that the correct templates are used on the home page."""
         response = self.client.get("/")
@@ -219,7 +296,9 @@ class ProfileLoginRegisterTests(TestCase):
         response = self.client.post(reverse_lazy('home'),
                                     {'search': 'Philips Hue'},
                                     follow=True)
-        self.assertTrue('The most recent version number we could find' in response.context['version'])
+        self.assertTrue(
+            'The most recent version number we could find' in
+            response.context['version'])
 
     def test_search_profile_page_logged_in(self):
         """Search should be ok whether logged in or not."""
