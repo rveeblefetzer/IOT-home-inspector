@@ -24,11 +24,12 @@ class SearchResultTestCase(TestCase):
 
     def test_getting_the_right_html_firmware(self):
         """Test that the html in the beautiful soup object contains the search resaults for firmware updates."""
-        self.assertTrue(str(self.soups[0].title) == '<title>Philips hue firmware update - Bing</title>')
+        self.assertTrue(str(self.soups[0].title) == '<title>philips hue firmware update - Bing</title>')
 
     def test_getting_the_right_html_security(self):
         """Test that the html in the beautiful soup object contains the search resaults for security vulnerabilities."""
-        self.assertTrue(str(self.soups[1].title) == '<title>Philips hue security vulnerabilities - Bing</title>')
+        
+        self.assertTrue(str(self.soups[1].title) == '<title>philips hue security vulnerabilities - Bing</title>')
 
     def test_soups_is_list(self):
         """Test that make search returns a list."""
@@ -80,7 +81,7 @@ class GetVersionsTestCase(TestCase):
                 pass
             else:
                 self.links.append(link)
-        self.search_anticipated = get_versions('Philips hue', self.links)
+        self.search_anticipated = get_versions('Philips Hue', self.links)
         self.search_not_anticipated = get_versions('Samsung Family hub', self.links)
 
     def test_return_for_preset_url(self):

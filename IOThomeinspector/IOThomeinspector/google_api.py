@@ -6,9 +6,8 @@ import requests
 
 
 def make_search(key_words):
-    """Takes user input as a string and returns a list of
-    beautiful soup objects for each search extension in the extensions list.
-    """
+    """Takes user input as a string and returns a list of beautiful soup objects for each search extension in the extensions list."""
+    key_words = key_words.lower()
     soups = []
     extensions = ['+firmware+update', '+security+vulnerabilities',
                   '+most+recent+firmware+version']
@@ -36,9 +35,8 @@ def make_search(key_words):
 
 
 def get_links(key_words):
-    """Takes in user input as keywords and returns a list containing
-    lists of relevent links from each extension in the function above.
-    """
+    """Takes in user input as key words and returns a list containnig lists of relevent links from each extension in the function above.."""
+    key_words = key_words.lower()
     links = []
     soups = make_search(key_words)
     if len(list(soups)) == 0:
@@ -62,17 +60,20 @@ def get_links(key_words):
 
 
 def get_versions(key_words, links):
-    """Try to find the current firmware version based on relevent links."""
+    """Try to find the most recent versions of firmware bsed on the relevent links."""
+    key_words = key_words.lower()
     soup = None
     top_links = [
                 'http://www2.meethue.com/en-us/release-notes/bridge/',
                 'https://www.amazon.com/gp/help/customer/display.html/ref=as_li_ss_tl?nodeId=201602210&linkCode=ll2&tag=lovemyecho-20&linkId=0ce46b6aac3da632049edf10ad05bffd',
     ]
-    #check if user's search is for an item we have accounted for; if it is, return most recent version number from its page.
-    if 'philips' in list(key_words.lower()) and 'hue' in list(key_words.lower()):
+    
+    #check to see if what the user is searching for is an item we have acounted for and if it is return the most recents version number from its page.
+    if 'philips' in key_words and 'hue' in key_words:
         soup = BeautifulSoup(requests.get(top_links[0], auth=('user', 'pass')).text, 'html.parser')
-    elif 'amazon' in list(key_words.lower()) and 'echo' in list(key_words.lower()):
-        soup = BeautifulSoup(requests.get(top_links[4], auth=('user', 'pass')).text, 'html.parser')
+    elif 'amazon' in key_words and 'echo' in key_words:
+        soup = BeautifulSoup(requests.get(top_links[1], auth=('user', 'pass')).text, 'html.parser')
+
     if soup:
         return scrape_soup(key_words, soup)
     #if user's search is not in our prepopulated device list, search through relevent links and find the likeliest most recent version number.
@@ -85,8 +86,8 @@ def get_versions(key_words, links):
 
 def scrape_soup(key_words, soup):
     """Scrape the soup for the most recent version number"""
-    hot_words = ['version:', 'Version:', 'version', 'Version', 'firmware',
-                 'software', 'Firmware', 'Software']
+    key_words = key_words.lower()
+    hot_words = ['version:', 'Version:', 'version', 'Version', 'firmware', 'software', 'Firmware', 'Software']
     highest_priority_val = 0
     highest_priority_num = ''
     for word in key_words.split(' '):
