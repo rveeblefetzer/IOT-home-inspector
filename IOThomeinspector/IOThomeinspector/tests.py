@@ -59,6 +59,22 @@ class LinkFilterTestCase(TestCase):
             for link in links:
                 self.assertTrue(type(link[0]) == str)
 
+    def test_link_type(self):
+        """Test that the type of the links is a string."""
+        for links in self.links[0]:
+            for link in links:
+                self.assertTrue(type(link[0]) == str)
+
+    def test_search_filter_blacklist(self):
+        """Test that blacklisted terms are stripped from search."""
+        dirty_search = make_search("amazon porn echo")
+        self.assertTrue('porn' not in dirty_search)
+
+    def test_search_filter_whitelist(self):
+        """Test that whitelisted search passes OK."""
+        valid_search = make_search("amazon echo")
+        self.assertTrue('echo' in valid_search)
+
 # class UserAgentHomeViewTestCase(TestCase):
 #     """Test that home view returns user-agent info on browser."""
 #     test_browser = Client(HTTP_USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3011.0 Safari/537.36')
