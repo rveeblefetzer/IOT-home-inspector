@@ -32,6 +32,18 @@ Use the ```./manage.py makemigrations``` and ```./manage.py migrate``` commands 
 
 You can now run ```./manage.py runserver``` to run the site from your command line. By default the site will run on port 8000.
 
+##Routes
+
+```
+   admin/
+   / #The home page route
+   /registration/register #The route for a new user to register
+   /login #The login route for users. Users will be prompted to input a verification code from the 2 Factor Authentication
+   /logout #Logs out the user
+   /profile #A user can view their own profile. No social sharing here.
+   user/password/reset/ #Route to reset a password
+```
+
 ## Two-factor authentication
 Any visitor can use the site's basic function of entering a device model and receiving information on the current software and/or firmware versions. Registered users can use the site to maintain a list of their devices. They can also choose to add two-factor authentication (2fa) to their login process, which is implemented through the [django-two-factor-auth library](https://django-two-factor-auth.readthedocs.io/en/stable/). Currently this is implemented through time-based tokens using an app such as [Google Authenticator](https://support.google.com/accounts/answer/1066447) or [Authy](https://www.authy.com), or a from a listed of generated backup tokens. Site admins must use two-factor authentication.
 

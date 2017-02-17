@@ -25,7 +25,8 @@
                     <a class="text-uppercase" href="{% url 'logout' %}"><li class="active" role="presentation">Logout</li></a>
                     <a class="text-uppercase" href="{% url 'profile' %}"><li class="active" role="presentation">My Devices</li></a>
                     {% else %}
-                    <a class="text-uppercase" href="{% url 'login' %}"><li class="active" role="presentation">log in</li></a>
+                    <a class="text-uppercase" href="{% url 'login' %}"><li class="active" role="presentation">Log In</li></a>
+                    <a class="text-uppercase" href="{% url 'password_reset' %}"><li class="active" role="presentation">Forgot Password?</li></a>
                 </ul><a class="btn btn-default btn-lg navbar-btn action-button" role="button" href="{% url 'registration_register' %}">Sign Up</a> {% endif %}
                 </ul>
             </div>
