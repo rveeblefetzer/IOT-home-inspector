@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
-    'two_factor',
     'IOThomeinspector',
     'multiselectfield',
     'userprofile',
+    'two_factor',
 ]
 
 MIDDLEWARE = [
