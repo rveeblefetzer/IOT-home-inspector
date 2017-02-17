@@ -24,11 +24,12 @@ class SearchResultTestCase(TestCase):
 
     def test_getting_the_right_html_firmware(self):
         """Test that the html in the beautiful soup object contains the search resaults for firmware updates."""
-        self.assertTrue(str(self.soups[0].title) == '<title>Philips hue firmware update - Bing</title>')
+        self.assertTrue(str(self.soups[0].title) == '<title>philips hue firmware update - Bing</title>')
 
     def test_getting_the_right_html_security(self):
         """Test that the html in the beautiful soup object contains the search resaults for security vulnerabilities."""
-        self.assertTrue(str(self.soups[1].title) == '<title>Philips hue security vulnerabilities - Bing</title>')
+        
+        self.assertTrue(str(self.soups[1].title) == '<title>philips hue security vulnerabilities - Bing</title>')
 
     def test_soups_is_list(self):
         """Test that make search returns a list."""
@@ -85,5 +86,5 @@ class GetVersionsTestCase(TestCase):
 
     def test_return_for_preset_url(self):
         """Test when user searches an item we accounted for, it returns a predictable number."""
-        self.assertTrue(self.search_anticipated == 'We could not find the most recent software/firmware version of your device; hopefully these links will help. If you want to search again, try using specific manufacturer and model names or product numbers.')
+        self.assertTrue(self.search_anticipated == '01036659')
 
