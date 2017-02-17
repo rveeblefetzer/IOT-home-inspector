@@ -25,9 +25,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'y*5jjvgpek!mfhq1@zpvs5!a3s18^0fs550u(8d=1bq9v=82*@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['54.202.203.134', 'ec2-54-202-203-134.us-west-2.compute.amazonaws.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['54.202.203.134',
+                 'ec2-54-202-203-134.us-west-2.compute.amazonaws.com',
+                 '127.0.0.1',
+                 'localhost']
 
 
 # Application definition
@@ -156,7 +159,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'iothomeinspector@gmail.com'
+EMAIL_HOST_USER = os.environ.get("EMAIL_ACCT", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
 
 #LOGIN/LOGOUT URLS

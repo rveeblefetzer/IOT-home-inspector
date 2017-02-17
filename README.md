@@ -13,8 +13,35 @@ Joseph Derosa
 Conor Clary
 
 **Setup Instructions**
+
+Use the git clone command to ```git clone https://github.com/rveeblefetzer/IOT-home-inspector.git``` into your directory of choice.
+
+Install a virtual environment with ```python3 -m venv .``` or ```python3 -m venv /[some_env_directory_name]```
+
+Activate the virtual environment with ```. [path/to/bin/activate]```
+
+Navigate to the IOThomeinspector directory to the same level as requirements.pip
+
+Install the app with ```pip install -r requirements.pip```
+
+At this point please ensure that in your virtual environment activate file you have a DB_USER, DB_PASS, EMAIL_PASS, and EMAIL_ACCT exported. You can also set these up in your settings.py file in IOT-home-inspector/IOThomeinspector/IOThomeinspector/settings.py
+
+At the same level as requirements.pip, use the ```createdb IOT``` command to create the IOT database for users
+
+Use the ```./manage.py makemigrations``` and ```./manage.py migrate``` commands to move your models to the newly created database. 
+
+You can now run ```./manage.py runserver``` to run the site from your command line. By default the site will run on port 8000.
+
+##Routes
+
 ```
-git clone https://github.com/rveeblefetzer/IOT-home-inspector.git
+   admin/
+   / #The home page route
+   /registration/register #The route for a new user to register
+   /login #The login route for users. Users will be prompted to input a verification code from the 2 Factor Authentication
+   /logout #Logs out the user
+   /profile #A user can view their own profile. No social sharing here.
+   user/password/reset/ #Route to reset a password
 ```
 
 ## Two-factor authentication

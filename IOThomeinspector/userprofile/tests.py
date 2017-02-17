@@ -18,7 +18,9 @@ try:
     from unittest import mock
 except ImportError:
     import mock
-
+from django.dispatch import receiver
+from django.contrib.sites.shortcuts import get_current_site
+from two_factor.signals import user_verified
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -337,7 +339,6 @@ class ProfileLoginRegisterTests(TestCase):
 
 """These are the 2 Factor Authorization tests from ."""
 
-
 class LoginTest(UserMixin, TestCase):
     def _post(self, data=None):
         return self.client.post(reverse('two_factor:login'), data=data)
@@ -383,16 +384,6 @@ class LoginTest(UserMixin, TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse_lazy('profile'))
         self.assertTrue(response.status_code == 200)
-
-    def test_valid_login_with_custom_redirect(self):
-        redirect_url = reverse('two_factor:setup')
-        self.create_user()
-        response = self.client.post(
-            '%s?%s' % (reverse('two_factor:login'), 'next=' + redirect_url),
-            {'auth-username': 'bouke@example.com',
-             'auth-password': 'secret',
-             'login_view-current_step': 'auth'})
-        self.assertRedirects(response, redirect_url)
 
     @mock.patch('two_factor.views.core.signals.user_verified.send')
     def test_with_generator(self, mock_signal):
