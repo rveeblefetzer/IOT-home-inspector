@@ -330,6 +330,11 @@ class ProfileLoginRegisterTests(TestCase):
                                     follow=True)
         self.assertTrue(response.status_code == 200)
 
+    def test_team_page_html(self):
+        """Testing for team page."""
+        response = self.client.get("/")
+        self.assertTrue(response, "team.html")
+
 """These are the 2 Factor Authorization tests from ."""
 
 
