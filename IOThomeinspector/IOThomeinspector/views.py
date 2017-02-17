@@ -49,3 +49,7 @@ def HomePageView(request):
     except KeyError:
         context = {}
         return render(request, 'home.html', context)
+
+def team_view(request):
+    """Creating team view."""
+    return render(request, "team.html")

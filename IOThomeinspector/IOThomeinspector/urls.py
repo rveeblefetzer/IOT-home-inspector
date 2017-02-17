@@ -25,7 +25,7 @@ from django.contrib.auth.views import (
     password_reset_complete)
 from django.views.static import serve
 from django.conf.urls.static import static
-from IOThomeinspector.views import HomePageView
+from IOThomeinspector.views import HomePageView, team_view
 from two_factor.urls import LoginView, SetupView
 
 admin.site.__class__ = AdminSiteOTPRequired
@@ -59,4 +59,5 @@ urlpatterns = [
         name='password_reset_confirm'),
     url(r'^user/password/done/$',
         password_reset_complete),
+    url(r'^team/$', team_view, name='team')
 ]
