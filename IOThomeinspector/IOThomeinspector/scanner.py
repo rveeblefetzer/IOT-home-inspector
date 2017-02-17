@@ -11,7 +11,6 @@ def find_local_ip_and_mask():
 			local_ip = net_info_list[net_info_list.index(i) - 2].split(':')[1]	
 			mask = net_info_list[net_info_list.index(i) + 2].split(':')[1]
 			mask = mask[:-1]
-			print(mask)
 	return (local_ip, mask)
 
 
@@ -61,4 +60,20 @@ def main():
 	b = find_ip_range(a)
 	c = scan_ip_range(b)
 	d = get_warning(c)
-	return d
+	print('------------')
+	print('Local IP and Mask:')
+	print(a)
+	print('------------')
+	print('Max range for IP:')
+	print(b)
+	print('------------')
+	print('Scan rsaults:')
+	print(c)
+	print('------------')
+	print('Telnet status:')
+	print(d)
+	print('------------')
+
+
+if __name__ == '__main__':
+	main()
