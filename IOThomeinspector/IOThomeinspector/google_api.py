@@ -16,17 +16,18 @@ def make_search(key_words):
                  'nest cam', 'philips hue', 'philips', 'hue', 'xiaomi', 'huawei',
                  'logitech', 'fisher-price', 'wink', 'hub']
     blacklist = ['porn', 'pr0n', 'cumshot', 'titties', 'tits', 'anal',
-                'fuck', 'pussy', 'dick', 'cock', 'boobs', 'pawg', 'booty',
-                'butt', 'meth', 'cocaine', 'killed', 'dead', 'lolita', 'milf',
-                'wilf', 'vagina', 'scat', 'peg', 'pegging', 'blowjob', 'golden shower',
-                'rim job', 'taint']
-    for word in list(key_words):
+                 'fuck', 'pussy', 'dick', 'cock', 'boobs', 'pawg', 'booty',
+                 'butt', 'meth', 'cocaine', 'killed', 'dead', 'lolita', 'milf',
+                 'wilf', 'vagina', 'scat', 'peg', 'pegging', 'blowjob', 'golden shower',
+                 'rim job', 'taint']
+    key_words = key_words.split()
+    for word in key_words:
         if word.lower() in whitelist:
             continue
         if word.lower() in blacklist:
             key_words.remove(word)
     for search_extension in extensions:
-        search_term = '+'.join(key_words.split(' ')) + search_extension
+        search_term = '+'.join(key_words) + search_extension
         search_request = requests.get(
             'https://bing.com/search?q=' + search_term, auth=('user', 'pass'))
         soup = BeautifulSoup(search_request.text, 'html.parser')
