@@ -37,23 +37,28 @@ def scan_ip_range(min_max):
 	scans = []
 	min_ip = min_max[0]
 	max_ip = min_max[1]
-	for index_zero in range(int(min_ip[0]), int(max_ip[0]) + 1):
-		for index_one in range(int(min_ip[1]), int(max_ip[1]) + 1):
-			for index_two in range(int(min_ip[2]), int(max_ip[2]) + 1):
-				for index_three in range(int(min_ip[3]), int(max_ip[3]) + 1):
-					ip = [str(index_zero), str(index_one), str(index_two), str(index_three)]
-					ip = '.'.join(ip)
-					scan = subprocess.Popen(['sudo', 'nmap', '-O', '-T5', '--top-ports', '25', ip], stdout=subprocess.PIPE).communicate()[0]
-					scans.append(scan)
-					print(scan)	
+	scan_ip = ['172.16.11.242', '172.16.0.101']
+	for ip in scan_ip:
+		scan = subprocess.Popen(['sudo', 'nmap', '-O', '-T5', '--top-ports', '25', ip], stdout=subprocess.PIPE).communicate()[0]
+		if 'open' in scan or 'filtered' in scan:
+			scans.append(scan)
 	return scans
+
+
+def get_warning(scans):
+	port_status = []
+	for scan in scans:
+		for element in scan.split('\n'):
+			if 'telnet' in element:
+				element_list = element.split(' ')
+				element_list = [i for i in element_list if i != '']	
+				port_status.append(element_list[element_list.index('telnet') - 1])
+	return port_status
 
 
 def main():
 	a = find_local_ip_and_mask()
 	b = find_ip_range(a)
 	c = scan_ip_range(b)
-	return c
-
-if __name__ == '__main__':
-	main()
+	d = get_warning(c)
+	return d
