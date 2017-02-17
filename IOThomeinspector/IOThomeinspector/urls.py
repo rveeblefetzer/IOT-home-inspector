@@ -17,10 +17,15 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
 from two_factor.admin import AdminSiteOTPRequired
-from django.contrib.auth.views import logout
+from django.contrib.auth.views import (
+    logout,
+    password_reset,
+    password_reset_done,
+    password_reset_confirm,
+    password_reset_complete)
 from django.views.static import serve
 from django.conf.urls.static import static
-from IOThomeinspector.views import HomePageView
+from IOThomeinspector.views import HomePageView, team_view
 from two_factor.urls import LoginView, SetupView
 
 admin.site.__class__ = AdminSiteOTPRequired
@@ -41,5 +46,18 @@ urlpatterns = [
     ),
     url(r'^registration/', include('registration.backends.hmac.urls')),
     url(r'^logout/$', logout, name='logout'),
-    url(r'^profile/', include('userprofile.urls'))
+    url(r'^profile/', include('userprofile.urls')),
+    url(r'^user/password/reset/$',
+        password_reset,
+        {'post_reset_redirect': '/user/password/reset/done/'},
+        name="password_reset"),
+    url(r'^user/password/reset/done/$',
+        password_reset_done),
+    url(r'^user/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        password_reset_confirm,
+        {'post_reset_redirect': '/user/password/done/'},
+        name='password_reset_confirm'),
+    url(r'^user/password/done/$',
+        password_reset_complete),
+    url(r'^team/$', team_view, name='team')
 ]

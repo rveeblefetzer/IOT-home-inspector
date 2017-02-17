@@ -34,14 +34,22 @@ def HomePageView(request):
                 if float(browser.split('/')[1][0:4]) < 10:
                     check = False
             else:
-                browser = None
+                browser = item
+                check = False
         if check is True:
             browser = "You are using " + browser + ", you are up to date!"
-        else:
+        elif not check and ('Safari' in browser or 'Chrome' in browser or
+                            'Firefox' in browser):
             browser = "You are using " + browser + ", you are not up to date!"
+        else:
+            browser = "You are using " + browser + ", we do not know if you are up to date!"
         if browser:
             context = {'browser': browser}
             return render(request, 'home.html', context)
     except KeyError:
         context = {}
         return render(request, 'home.html', context)
+
+def team_view(request):
+    """Creating team view."""
+    return render(request, "team.html")

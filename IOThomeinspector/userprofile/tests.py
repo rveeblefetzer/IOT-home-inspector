@@ -18,7 +18,9 @@ try:
     from unittest import mock
 except ImportError:
     import mock
-
+from django.dispatch import receiver
+from django.contrib.sites.shortcuts import get_current_site
+from two_factor.signals import user_verified
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -132,6 +134,83 @@ class ProfileLoginRegisterTests(TestCase):
         response = HomePageView(req)
         self.assertTrue(response.status_code == 200)
 
+    def test_home_view_status_is_ok2(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Chrome/56.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Chrome/56.3, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok3(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Firefox/56.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Firefox/56.3, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok4(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Safari/10.5'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Safari/10.5, you are up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok5(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Chrome/50.3'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Chrome/50.3, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok6(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Firefox/49'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Firefox/49, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok7(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Safari/8'
+        response = HomePageView(req)
+        self.assertTrue(
+            'You are using Safari/8, you are not up to date!' in
+            str(response.content))
+
+    def test_home_view_status_is_ok8(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        req.META['HTTP_USER_AGENT'] = 'Opera'
+        response = HomePageView(req)
+        self.assertTrue(
+            "You are using Opera, we do not know if you are up to date!" in
+            str(response.content))
+
+    def test_home_view_status_is_ok9(self):
+        """Test a get request on the home view."""
+        from IOThomeinspector.views import HomePageView
+        req = self.request.get("/")
+        response = HomePageView(req)
+        self.assertTrue('You are using' not in str(response.content))
+
     def test_home_route_uses_correct_templates(self):
         """Test that the correct templates are used on the home page."""
         response = self.client.get("/")
@@ -148,49 +227,112 @@ class ProfileLoginRegisterTests(TestCase):
 
     def test_search_page_not_logged_in(self):
         """Search should be ok whether logged in or not."""
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sf_links_titles' in response.context)
 
     def test_search_page_not_logged_in2(self):
         """Search should be ok whether logged in or not."""
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sf_links_titles']) > 0)
+
+    def test_search_page_not_logged_in3(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sec_links_titles' in response.context)
+
+    def test_search_page_not_logged_in4(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sec_links_titles']) > 0)
+
+    def test_search_page_not_logged_in5(self):
+        """Search should be ok whether logged in or not."""
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('version' in response.context)
 
     def test_search_page_logged_in(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sf_links_titles' in response.context)
 
     def test_search_page_logged_in2(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('home'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sf_links_titles']) > 0)
+
+    def test_search_page_logged_in3(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(len(response.context['sec_links_titles']) > 0)
+
+    def test_search_page_logged_in4(self):
+        """Search should be ok whether logged in or not."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('home'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue(
+            'The most recent version number we could find' in
+            response.context['version'])
 
     def test_search_profile_page_logged_in(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue('kwcontext' in response.context)
+        response = self.client.post(reverse_lazy('profile'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('sec_links_titles' in response.context)
 
     def test_search_profile_page_logged_in2(self):
         """Search should be ok whether logged in or not."""
         user = UserFactory.create()
         user.save()
         self.client.force_login(user)
-        response = self.client.post(reverse_lazy('profile'), {'search':'Philips Hue'}, follow=True)
-        self.assertTrue(len(response.context['kwcontext']) > 0)
+        response = self.client.post(reverse_lazy('profile'),
+                                    {'search': 'Philips Hue'},
+                                    follow=True)
+        self.assertTrue('version' in response.context)
 
+    def test_edit_profile_page(self):
+        """Test edit a profile."""
+        user = UserFactory.create()
+        user.save()
+        self.client.force_login(user)
+        response = self.client.post(reverse_lazy('edit_profile'),
+                                    {'Email': 'Philips@Hue.com'},
+                                    follow=True)
+        self.assertTrue(response.status_code == 200)
 
 """These are the 2 Factor Authorization tests from ."""
-
 
 class LoginTest(UserMixin, TestCase):
     def _post(self, data=None):
@@ -237,16 +379,6 @@ class LoginTest(UserMixin, TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse_lazy('profile'))
         self.assertTrue(response.status_code == 200)
-
-    def test_valid_login_with_custom_redirect(self):
-        redirect_url = reverse('two_factor:setup')
-        self.create_user()
-        response = self.client.post(
-            '%s?%s' % (reverse('two_factor:login'), 'next=' + redirect_url),
-            {'auth-username': 'bouke@example.com',
-             'auth-password': 'secret',
-             'login_view-current_step': 'auth'})
-        self.assertRedirects(response, redirect_url)
 
     @mock.patch('two_factor.views.core.signals.user_verified.send')
     def test_with_generator(self, mock_signal):
