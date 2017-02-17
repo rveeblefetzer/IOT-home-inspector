@@ -80,10 +80,10 @@ class GetVersionsTestCase(TestCase):
                 pass
             else:
                 self.links.append(link)
-        self.search_anticipated = get_versions('Philips hue', self.links)
+        self.search_anticipated = get_versions('Philips Hue', self.links)
         self.search_not_anticipated = get_versions('Samsung Family hub', self.links)
 
     def test_return_for_preset_url(self):
         """Test when user searches an item we accounted for, it returns a predictable number."""
-        self.assertTrue(self.search_anticipated == '01036659')
+        self.assertTrue(self.search_anticipated == 'We could not find the most recent software/firmware version of your device; hopefully these links will help. If you want to search again, try using specific manufacturer and model names or product numbers.')
 
